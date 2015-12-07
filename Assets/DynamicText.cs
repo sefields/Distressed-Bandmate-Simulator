@@ -12,10 +12,10 @@ public class DynamicText : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		index = 0;
+		//index = 0;
 
-		wordStoreObject = GameObject.Find ("WordStore");
-		wordStore = wordStoreObject.GetComponent<WordStore> ();
+		//wordStoreObject = GameObject.Find ("WordStore");
+		//wordStore = wordStoreObject.GetComponent<WordStore> ();
 		//Note: listOfWords[0] returns a sane word, [1] returns ambig, [2] returns insane
 
 	}
@@ -45,12 +45,45 @@ public class DynamicText : MonoBehaviour {
 	public void setInitialText(){
 		float roll = Random.Range (0, 100);
 		if (Score.score < 0) { //sane
-			GetComponent<TextMesh> ().text = listOfWords [0];
+            if (roll < 50)
+            {
+                GetComponent<TextMesh>().text = listOfWords[0];
+            }
+            else if (roll >= 50 && roll < 75)
+            {
+                cycle();
+            }
+            else {
+                cycle();
+                cycle();
+            }
+            
 		} else if (Score.score == 0) { //ambiguous
-			cycle ();
+            if (roll < 50)
+            {
+                cycle();
+            }
+            else if (roll >= 50 && roll < 75)
+            {
+                GetComponent<TextMesh>().text = listOfWords[0];
+            }
+            else {
+                cycle();
+                cycle();
+            }
 		} else { //insane
-			cycle();
-			cycle();
+            if (roll < 50)
+            {
+                cycle();
+                cycle();
+            }
+            else if (roll >= 50 && roll < 75)
+            {
+                cycle();
+            }
+            else {
+                GetComponent<TextMesh>().text = listOfWords[0];
+            }
 		}
 
 	}
@@ -61,10 +94,9 @@ public class DynamicText : MonoBehaviour {
 	}
 
 	public void cycle() {
-		index ++;
+		index++;
 		if (index >= listOfWords.Count)
 			index = 0; 
-		Debug.Log ("count " + listOfWords.Count + " index " + index);
 		GetComponent <TextMesh>().text = listOfWords[index];
 	}
 }

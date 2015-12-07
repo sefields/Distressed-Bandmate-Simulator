@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class Score : MonoBehaviour {
 
 	public static int score = 0;
-	public List<GameObject> passages = new List<GameObject>();
+    public List<GameObject> passages;
+    public List<GameObject> endingPassages;
 	public GameObject currPassage;
 	public GameObject dynaTextPrefab;
 	public GameObject dynaTextWhere;
@@ -28,21 +29,44 @@ public class Score : MonoBehaviour {
 
 			//Count up the score
 			getVerseScore ();
+            Debug.Log(Score.score);
 
 			//Cycle to the next passage and destroy the old one
-			GameObject destroy = currPassage;
-			currPassage =  (GameObject) Instantiate (passages [++index], transform.position, Quaternion.identity);
-			Destroy (destroy);
+            if(++index >= passages.Count) { // ending passage case, spawn ending passage based on insanity score
+                GameObject destroy = currPassage;
+                if (Score.score > 3)
+                { //insane ending
+                    currPassage = (GameObject)Instantiate(endingPassages[2], transform.position, Quaternion.identity);
+                }
+                else if (Score.score <= 3 && Score.score >= -3)
+                { //ambiguous ending
+                    currPassage = (GameObject)Instantiate(endingPassages[1], transform.position, Quaternion.identity);
+                }
+                else if (Score.score < -3)
+                { //sane ending
+                    currPassage = (GameObject)Instantiate(endingPassages[0], transform.position, Quaternion.identity);
+                } else
+                {
+                    Debug.Log("somethings wrong");
+                }
+                Destroy(destroy);
+            } else { //default case to add next passage 
+                GameObject destroy = currPassage;
+                currPassage = (GameObject)Instantiate(passages[index], transform.position, Quaternion.identity);
+                Destroy(destroy);              
+            }
 
-			//Destroy any dynamic texts that are lying around
-			GameObject[] dynamicTexts = GameObject.FindGameObjectsWithTag ("dynamic");
-			foreach(GameObject word in dynamicTexts){
-				Destroy (word);
-			}
+            //Destroy any dynamic texts that are lying around
+            GameObject[] dynamicTexts = GameObject.FindGameObjectsWithTag("dynamic");
+            foreach (GameObject word in dynamicTexts)
+            {
+                Destroy(word);
+            }
 
-			//Spawn words
-			spawnWords();
-
+            //Spawn words
+            if (index < passages.Count) {
+                spawnWords();
+            }
 			//GameObject dText = (GameObject) Instantiate(dynaTextPrefab, dynaTextWhere.transform.position, Quaternion.identity);
 			//dText.GetComponent<DynamicText>().setInitialText(score); //MARKKKEDDDDD
 		}
