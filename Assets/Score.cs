@@ -25,6 +25,7 @@ public class Score : MonoBehaviour {
 	void Start () {
 		currPassage = (GameObject) Instantiate (passages [index], transform.position, Quaternion.identity);
 		//spawnWords ();
+
 	}
 	
 	// Update is called once per frame
@@ -35,6 +36,7 @@ public class Score : MonoBehaviour {
 			//Count up the score
 			getVerseScore ();
             Debug.Log(Score.score);
+            updateColor();
 
 			//Cycle to the next passage and destroy the old one
 
