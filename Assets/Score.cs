@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Score : MonoBehaviour {
 
@@ -13,6 +14,10 @@ public class Score : MonoBehaviour {
 
 	public float answersLeftSide;
 	public float answersRightSide;
+
+	public Color saneColor;
+	public Color neutralColor;
+	public Color insaneColor;
 
 
 	// Use this for initialization
@@ -42,6 +47,9 @@ public class Score : MonoBehaviour {
 
 			//Spawn words
 			spawnWords();
+
+			//Update background color
+			updateColor ();
 
 			//GameObject dText = (GameObject) Instantiate(dynaTextPrefab, dynaTextWhere.transform.position, Quaternion.identity);
 			//dText.GetComponent<DynamicText>().setInitialText(score); //MARKKKEDDDDD
@@ -79,6 +87,16 @@ public class Score : MonoBehaviour {
 				Debug.Log ("bad index");
 			}
 		}
+	}
+
+	public void updateColor(){
+		GameObject bg = GameObject.Find ("RawImage");
+		Color currColor = bg.GetComponent<RawImage> ().color;
+		//Debug.Log (score + "    " + currColor);
+
+		if (score <= -3) bg.GetComponent<RawImage> ().color = saneColor;
+		else if (score >=3) bg.GetComponent<RawImage> ().color = insaneColor;
+		else bg.GetComponent<RawImage> ().color = neutralColor;
 	}
 
 
